@@ -25,6 +25,14 @@ function ConverterCard({ config, onConversion }: ConverterCardProps) {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
+  const handleValueChange = (e) => {
+  const value = e.target.value;
+
+  if (value.length > 30) return;
+
+  setInputValue(value.trim());
+};
+
   const performConversion = useCallback(() => {
     const validation = validateInput(inputValue, fromUnit, config);
 
@@ -115,7 +123,7 @@ function ConverterCard({ config, onConversion }: ConverterCardProps) {
           type="text"
           className={`converter-input ${error ? 'converter-input-error' : ''}`}
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={(e)=>handleValueChange(e)}
           placeholder="Enter a value"
           inputMode="decimal"
         />
