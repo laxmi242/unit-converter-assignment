@@ -25,25 +25,48 @@ function ConverterCard({ config, onConversion }: ConverterCardProps) {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.trim();
+const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  let value = e.target.value.trim();
 
-    // Prevent extremely large input
-    if (value.length > 30) return;
+  // Prevent extremely large input
+  if (value.length > 30) return;
 
-    // Allow:
-    // - empty string
-    // - digits
-    // - one optional minus at the start
-    // - one optional decimal point
-    const validNumberPattern = /^-?\d*\.?\d*$/;
+  const validNumberPattern = /^-?\d*\.?\d*$/;
 
-    if (!validNumberPattern.test(value)) {
-      return;
-    }
+  if (!validNumberPattern.test(value)) {
+    return;
+  }
 
+  // Allow empty input
+  if (value === "") {
+    setInputValue("");
+    return;
+  }
+
+  // Allow partial negative input while typing
+  if (value === "-") {
     setInputValue(value);
-  };
+    return;
+  }
+
+  // Allow decimal values like 0.5
+  if (value === "0." || value === "-0.") {
+    setInputValue(value);
+    return;
+  }
+
+  // Convert multiple leading zeros:
+  // 00 -> 0
+  // 000 -> 0
+  // 0005 -> 5
+  // 0005.5 -> 5.5
+  // -0005 -> -5
+  if (/^-?0+\d/.test(value)) {
+    value = value.replace(/^(-?)0+(\d)/, "$1$2");
+  }
+
+  setInputValue(value);
+};
 
   const performConversion = useCallback(() => {
     const validation = validateInput(inputValue, fromUnit, config);

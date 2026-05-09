@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeftRight } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import './Header.css';
@@ -13,7 +13,6 @@ function Header() {
         </Link>
         <nav className="header-nav">
           <Link to="/" className="header-nav-link">Home</Link>
-          <Link to="/converter/length" className="header-nav-link">Converter</Link>
         </nav>
         <ThemeToggle />
       </div>
