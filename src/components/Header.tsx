@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeftRight } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import './Header.css';
