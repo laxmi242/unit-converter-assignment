@@ -25,13 +25,25 @@ function ConverterCard({ config, onConversion }: ConverterCardProps) {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const handleValueChange = (e) => {
-  const value = e.target.value;
+  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.trim();
 
-  if (value.length > 30) return;
+    // Prevent extremely large input
+    if (value.length > 30) return;
 
-  setInputValue(value.trim());
-};
+    // Allow:
+    // - empty string
+    // - digits
+    // - one optional minus at the start
+    // - one optional decimal point
+    const validNumberPattern = /^-?\d*\.?\d*$/;
+
+    if (!validNumberPattern.test(value)) {
+      return;
+    }
+
+    setInputValue(value);
+  };
 
   const performConversion = useCallback(() => {
     const validation = validateInput(inputValue, fromUnit, config);
@@ -123,7 +135,7 @@ function ConverterCard({ config, onConversion }: ConverterCardProps) {
           type="text"
           className={`converter-input ${error ? 'converter-input-error' : ''}`}
           value={inputValue}
-          onChange={(e)=>handleValueChange(e)}
+          onChange={(e) => handleValueChange(e)}
           placeholder="Enter a value"
           inputMode="decimal"
         />
